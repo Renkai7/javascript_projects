@@ -8,6 +8,7 @@ const btnAddTask = document.querySelector("#add-task");
 // Data
 const tasks = ["Buy", "Cook", "Wash"];
 
+// Classes
 class ToDoItem {
 	constructor(title) {
 		this.title = title;
@@ -25,21 +26,40 @@ class ToDoItem {
 	}
 }
 
+class ToDoList {
+	constructor() {
+		this.todoItems = [];
+	}
+
+	// add items to todo list
+	addItem(item) {
+		this.todoItems.push(item);
+	}
+
+	// remove item from list
+	removeItem(itemToRemove) {
+		const indexOfItem = this.todoItems.indexOf(itemToRemove);
+		if (indexOfItem === -1) {
+			// TODO: convert this into an error message in html
+			console.log("Item could not be found.");
+			return null;
+		}
+		this.todoItems.splice(indexOfItem, 1);
+	}
+
+	// Display all items in todo list
+	listAllItems() {
+		this.todoItems.forEach((item) => {
+			console.log(item.title, item.completed);
+		});
+	}
+}
+
+// ////////////////////////
 const clearInputField = function () {
 	userNewTaskInput.value = "";
 };
 
-const displayTasks = function () {};
-
-const addTask = function () {
-	tasks.push(userNewTaskInput.value);
-};
-
-addTask();
-
 btnAddTask.addEventListener("click", function (e) {
 	e.preventDefault();
-	addTask();
-	displayTasks();
-	clearInputField();
 });
