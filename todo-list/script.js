@@ -3,11 +3,8 @@
 // Elements
 const taskListContainer = document.querySelector("#task-list");
 const userNewTaskInput = document.querySelector("#new-task");
-const todoItemCheckboxes = document.querySelectorAll(".form-checkbox");
-const btnAddTask = document.querySelector("#add-task");
 
-// Data
-const tasks = ["Buy", "Cook", "Wash"];
+const btnAddTask = document.querySelector("#add-task");
 
 // Classes
 class ToDoItem {
@@ -61,6 +58,8 @@ class ToDoList {
 	}
 }
 
+const todoList = new ToDoList();
+
 // Functions
 // Add items to the list
 const addItemsToList = function (task) {
@@ -68,7 +67,20 @@ const addItemsToList = function (task) {
 };
 
 // Toggle completed tasks
-const toggleItemCompletion = function () {};
+const toggleItemCompletion = function (event) {
+	if (event.target && event.target.matches(".form-checkbox")) {
+		const itemId = event.target.getAttribute("data-id");
+		todoList.getItemById(Number(itemId)).toggleComplete();
+
+		if (event.target.checked) {
+			console.log("Checked Item ID:", itemId);
+		} else {
+			console.log("Unchecked Item ID:", itemId);
+		}
+
+		updateUI();
+	}
+};
 
 // Display items
 const displayItemsToList = function () {
@@ -76,12 +88,14 @@ const displayItemsToList = function () {
 	const itemsArray = todoList.listAllItems();
 
 	itemsArray.forEach((item) => {
+		const title = item.completed ? `<s>${item.title}</s>` : `${item.title}`;
+		const isChecked = item.completed ? "checked" : "";
 		const html = `
 		<li class="flex items-center justify-between p-2 border-b border-gray-200">
 			<label class="flex items-center space-x-3">
-				<input type="checkbox"
-					class="form-checkbox h-5 w-5 border-2 border-gray-400 rounded-full text-blue-600 focus:ring-transparent"  />
-				<span class="text-gray-700">${item.title}</span>
+				<input type="checkbox" data-id=${item.id}
+					class="form-checkbox h-5 w-5 border-2 border-gray-400 rounded-full text-blue-600 focus:ring-transparent" ${isChecked} />
+				<span class="text-gray-700">${title}</span>
 			</label>
 		</li>
 		`;
@@ -89,19 +103,15 @@ const displayItemsToList = function () {
 	});
 };
 
-// TESTING AREA - DELETE LATA
-const todoList = new ToDoList();
-
-todoList.getItemById(1).toggleComplete();
-
-displayItemsToList();
-
-// ////////////////////////
+const updateUI = function () {
+	displayItemsToList();
+};
 
 // Events
 btnAddTask.addEventListener("click", function (e) {
 	e.preventDefault();
 	addItemsToList(userNewTaskInput.value);
-	displayItemsToList();
-	console.log(todoItemCheckboxes);
+	updateUI();
 });
+
+taskListContainer.addEventListener("change", toggleItemCompletion);
