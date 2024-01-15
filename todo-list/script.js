@@ -7,6 +7,26 @@ const userNewTaskInput = document.querySelector("#new-task");
 const btnAddTask = document.querySelector("#add-task");
 
 // Classes
+// Observer pattern
+class Observer {
+	constructor() {
+		this.observers = [];
+	}
+
+	subscribe(fn) {
+		this.observers.push(fn);
+	}
+
+	unsubscribe(fn) {
+		this.observers = this.observers.filter((subscriber) => subscriber !== fn);
+	}
+
+	notify(data) {
+		this.observers.forEach((observer) => observer(data));
+	}
+}
+
+// Class for items in todo list
 class ToDoItem {
 	constructor(id, title) {
 		this.id = id;
@@ -20,10 +40,12 @@ class ToDoItem {
 	}
 }
 
+// Class for entire todo list
 class ToDoList {
 	constructor() {
 		this.todoItems = new Map();
 		this._nextId = 1;
+		this.observer = new Observer();
 	}
 
 	// add items to todo list
@@ -34,6 +56,7 @@ class ToDoList {
 		}
 		item.id = this._nextId++;
 		this.todoItems.set(item.id, item);
+		this.observer.notify(this.listAllItems());
 	}
 
 	// remove item from list
@@ -42,6 +65,15 @@ class ToDoList {
 			throw new Error("Item with the specified ID could not be found");
 		}
 		this.todoItems.delete(itemId);
+		this.observer.notify(this.listAllItems());
+	}
+
+	// Notify observers when an item is toggled
+	toggleComplete(itemId) {
+		if (this.todoItems.has(itemId)) {
+			this.todoItems.get(itemId).toggleComplete();
+			this.observer.notify(this.listAllItems());
+		}
 	}
 
 	// Retrieve specific item by ID
@@ -68,23 +100,21 @@ const addItemsToList = function (task) {
 
 // Toggle completed tasks
 const toggleItemCompletion = function (event) {
+	// Check if the event target is a checkbox
 	if (event.target && event.target.matches(".form-checkbox")) {
-		const itemId = event.target.getAttribute("data-id");
-		todoList.getItemById(Number(itemId)).toggleComplete();
+		const itemId = Number(event.target.getAttribute("data-id"));
+		todoList.toggleComplete(itemId);
 
 		if (event.target.checked) {
 			console.log("Checked Item ID:", itemId);
 		} else {
 			console.log("Unchecked Item ID:", itemId);
 		}
-
-		updateUI();
 	}
 };
 
 // Display items
 const displayItemsToList = function () {
-	taskListContainer.innerHTML = "";
 	const itemsArray = todoList.listAllItems();
 
 	itemsArray.forEach((item) => {
@@ -104,8 +134,11 @@ const displayItemsToList = function () {
 };
 
 const updateUI = function () {
+	taskListContainer.innerHTML = "";
 	displayItemsToList();
 };
+
+todoList.observer.subscribe(updateUI);
 
 // Events
 btnAddTask.addEventListener("click", function (e) {
