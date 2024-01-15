@@ -3,6 +3,7 @@
 // Elements
 const taskListContainer = document.querySelector("#task-list");
 const userNewTaskInput = document.querySelector("#new-task");
+const todoItemCheckboxes = document.querySelectorAll(".form-checkbox");
 const btnAddTask = document.querySelector("#add-task");
 
 // Data
@@ -25,10 +26,16 @@ class ToDoItem {
 class ToDoList {
 	constructor() {
 		this.todoItems = new Map();
+		this._nextId = 1;
 	}
 
 	// add items to todo list
 	addItem(item) {
+		// type safety
+		if (!(item instanceof ToDoItem)) {
+			throw new Error("item must be an instance of ToDoItem");
+		}
+		item.id = this._nextId++;
 		this.todoItems.set(item.id, item);
 	}
 
@@ -40,6 +47,14 @@ class ToDoList {
 		this.todoItems.delete(itemId);
 	}
 
+	// Retrieve specific item by ID
+	getItemById(itemId) {
+		if (!this.todoItems.has(itemId)) {
+			throw new Error("Item with the specified ID could not be found");
+		}
+		return this.todoItems.get(itemId);
+	}
+
 	// Display all items in todo list
 	listAllItems() {
 		return Array.from(this.todoItems.values());
@@ -48,33 +63,45 @@ class ToDoList {
 
 // Functions
 // Add items to the list
-const addItemsToList = function (id, task) {
-	todoList.addItem(new ToDoItem(id, task));
+const addItemsToList = function (task) {
+	todoList.addItem(new ToDoItem(null, task));
 };
+
+// Toggle completed tasks
+const toggleItemCompletion = function () {};
 
 // Display items
 const displayItemsToList = function () {
+	taskListContainer.innerHTML = "";
 	const itemsArray = todoList.listAllItems();
+
 	itemsArray.forEach((item) => {
-		// TODO: Replace console.log() with creating HTML list items
-		console.log(
-			`ID: ${item.id}, Title: ${item.title}, Completed: ${item.completed}`
-		);
+		const html = `
+		<li class="flex items-center justify-between p-2 border-b border-gray-200">
+			<label class="flex items-center space-x-3">
+				<input type="checkbox"
+					class="form-checkbox h-5 w-5 border-2 border-gray-400 rounded-full text-blue-600 focus:ring-transparent"  />
+				<span class="text-gray-700">${item.title}</span>
+			</label>
+		</li>
+		`;
+		taskListContainer.insertAdjacentHTML("beforeend", html);
 	});
 };
 
 // TESTING AREA - DELETE LATA
-let todoList = new ToDoList();
-addItemsToList(1, "Learn JavaScript");
-addItemsToList(2, "Write Code");
+const todoList = new ToDoList();
 
-// Getting the array of todo items
+todoList.getItemById(1).toggleComplete();
+
 displayItemsToList();
-// ////////////////////////
-const clearInputField = function () {
-	userNewTaskInput.value = "";
-};
 
+// ////////////////////////
+
+// Events
 btnAddTask.addEventListener("click", function (e) {
 	e.preventDefault();
+	addItemsToList(userNewTaskInput.value);
+	displayItemsToList();
+	console.log(todoItemCheckboxes);
 });
