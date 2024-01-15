@@ -2,6 +2,7 @@
 
 // Elements
 const taskListContainer = document.querySelector("#task-list");
+const completedTasksContainer = document.querySelector("#completed-task-list");
 const userNewTaskInput = document.querySelector("#new-task");
 
 const btnAddTask = document.querySelector("#add-task");
@@ -129,12 +130,17 @@ const displayItemsToList = function () {
 			</label>
 		</li>
 		`;
-		taskListContainer.insertAdjacentHTML("beforeend", html);
+		if (!item.completed) {
+			taskListContainer.insertAdjacentHTML("beforeend", html);
+		} else {
+			completedTasksContainer.insertAdjacentHTML("beforeend", html);
+		}
 	});
 };
 
 const updateUI = function () {
 	taskListContainer.innerHTML = "";
+	completedTasksContainer.innerHTML = "";
 	displayItemsToList();
 };
 
@@ -148,3 +154,4 @@ btnAddTask.addEventListener("click", function (e) {
 });
 
 taskListContainer.addEventListener("change", toggleItemCompletion);
+completedTasksContainer.addEventListener("change", toggleItemCompletion);
