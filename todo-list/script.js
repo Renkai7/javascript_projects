@@ -6,6 +6,7 @@ const completedTasksContainer = document.querySelector("#completed-task-list");
 const userNewTaskInput = document.querySelector("#new-task");
 
 const btnAddTask = document.querySelector("#add-task");
+const btnDeleteTask = document.querySelector("#delete-task");
 
 // Classes
 // Observer pattern
@@ -99,18 +100,22 @@ const addItemsToList = function (task) {
 	todoList.addItem(new ToDoItem(null, task));
 };
 
+// Remove items from the list
+const deleteItemsFromList = function () {
+	const itemsArray = todoList.listAllItems();
+	itemsArray.forEach((item) => {
+		if (item.completed) {
+			todoList.removeItem(item.id);
+		}
+	});
+};
+
 // Toggle completed tasks
 const toggleItemCompletion = function (event) {
 	// Check if the event target is a checkbox
 	if (event.target && event.target.matches(".form-checkbox")) {
 		const itemId = Number(event.target.getAttribute("data-id"));
 		todoList.toggleComplete(itemId);
-
-		if (event.target.checked) {
-			console.log("Checked Item ID:", itemId);
-		} else {
-			console.log("Unchecked Item ID:", itemId);
-		}
 	}
 };
 
@@ -141,6 +146,7 @@ const displayItemsToList = function () {
 const updateUI = function () {
 	taskListContainer.innerHTML = "";
 	completedTasksContainer.innerHTML = "";
+	userNewTaskInput.value = "";
 	displayItemsToList();
 };
 
@@ -150,6 +156,12 @@ todoList.observer.subscribe(updateUI);
 btnAddTask.addEventListener("click", function (e) {
 	e.preventDefault();
 	addItemsToList(userNewTaskInput.value);
+	updateUI();
+});
+
+btnDeleteTask.addEventListener("click", function (e) {
+	e.preventDefault();
+	deleteItemsFromList();
 	updateUI();
 });
 
