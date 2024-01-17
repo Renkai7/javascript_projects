@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>RPG Character Creator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+
+    <script defer src="script.js"></script>
+</head>
+
+<body class="bg-gray-900">
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-semibold mb-4">RPG Character Creator</h1>
+        <div id="character-container" class="bg-green-500 rounded-lg p-4 mb-4">
+            <!-- Character display will go here -->
+        </div>
+        <div id="options" class="bg-gray-500 rounded-lg p-4">
+            <div class="mb-4">
+                <label for="name-input" class="text-lg font-semibold">Character Name:</label>
+                <input type="text" id="name-input" class="border rounded-md p-2 w-full" placeholder="Enter name">
+            </div>
+            <div class="mb-4">
+                <label class="text-lg font-semibold">RPG Stats:</label>
+                <div class="flex flex-col mb-4">
+                    <!-- Strength attribute -->
+                    <div>
+                        <button class="bg-red-500 text-white px-2 py-1 rounded-full mb-2">-</button>
+                        <span class="text-lg font-semibold">Strength: 5</span>
+                        <button class="bg-green-500 text-white px-2 py-1 rounded-full mt-2">+</button>
+                    </div>
+                    <!-- Perception attribute -->
+                    <div>
+                        <button class="bg-red-500 text-white px-2 py-1 rounded-full mb-2">-</button>
+                        <span class="text-lg font-semibold">Perception: 5</span>
+                        <button class="bg-green-500 text-white px-2 py-1 rounded-full mt-2">+</button>
+                    </div>
+                    <!-- Endurance attribute -->
+                    <div>
+                        <button class="bg-red-500 text-white px-2 py-1 rounded-full mb-2">-</button>
+                        <span class="text-lg font-semibold">Endurance: 5</span>
+                        <button class="bg-green-500 text-white px-2 py-1 rounded-full mt-2">+</button>
+                    </div>
+                    <!-- Charisma attribute -->
+                    <div>
+                        <button class="bg-red-500 text-white px-2 py-1 rounded-full mb-2">-</button>
+                        <span class="text-lg font-semibold">Charisma: 5</span>
+                        <button class="bg-green-500 text-white px-2 py-1 rounded-full mt-2">+</button>
+                    </div>
+                    <!-- Intelligence attribute -->
+                    <div>
+                        <button class="bg-red-500 text-white px-2 py-1 rounded-full mb-2">-</button>
+                        <span class="text-lg font-semibold">Intelligence: 5</span>
+                        <button class="bg-green-500 text-white px-2 py-1 rounded-full mt-2">+</button>
+                    </div>
+                    <!-- Agility attribute -->
+                    <div>
+                        <button class="bg-red-500 text-white px-2 py-1 rounded-full mb-2">-</button>
+                        <span class="text-lg font-semibold">Agility: 5</span>
+                        <button class="bg-green-500 text-white px-2 py-1 rounded-full mt-2">+</button>
+                    </div>
+                    <!-- Luck attribute -->
+                    <div>
+                        <button class="bg-red-500 text-white px-2 py-1 rounded-full mb-2">-</button>
+                        <span class="text-lg font-semibold">Luck: 5</span>
+                        <button class="bg-green-500 text-white px-2 py-1 rounded-full mt-2">+</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
